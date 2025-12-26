@@ -1,3 +1,5 @@
+```mermaid
+
 sequenceDiagram
 participant User
 participant API
@@ -10,3 +12,4 @@ BusinessLogic->>Database: save(NewUser)
 Database-->>BusinessLogic: UserCreated
 BusinessLogic-->>API: UserCreated
 API-->>User: 201 Created
+```
