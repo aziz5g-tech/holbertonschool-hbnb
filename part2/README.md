@@ -160,14 +160,17 @@ cd part2
 python run.py
 
 **Server runs on:**
+
 http://127.0.0.1:5000
 
 **Swagger documentation:**
+
 http://127.0.0.1:5000/api/v1/
 
 ## Testing
 
 **Automated Tests**
+
 pytest test_api.py -v
 
 **Individual Endpoint Tests**
@@ -177,5 +180,6 @@ python test_user_endpoints.py
 python test_amenity_endpoints.py
 
 python test_place_endpoints.py
+
 
 
