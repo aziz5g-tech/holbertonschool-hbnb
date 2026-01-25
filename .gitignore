@@ -6,3 +6,5 @@ JWT_IMPLEMENTATION.md
 .env.test
 .pytest_cache/
 __pycache__/
+AUTHENTICATED_ENDPOINTS.md
+test_authenticated_endpoints.py
