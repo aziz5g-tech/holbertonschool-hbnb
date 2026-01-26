@@ -164,8 +164,21 @@ PRAGMA foreign_keys;            -- Check FK status
 ✅ Password properly hashed with bcrypt  
 ✅ CRUD operations tested and verified  
 
+## � Entity Relationship Diagram
+
+For a visual representation of the database schema, see:
+- **[ER_DIAGRAM.md](./ER_DIAGRAM.md)** - Complete Entity-Relationship diagram with Mermaid.js
+
+The ER diagram includes:
+- All tables and their columns
+- Relationships (One-to-Many, Many-to-Many)
+- Foreign keys and constraints
+- Cardinality explanations
+- Interactive visualization support
+
 ## 🔗 Related Tasks
 
+- **Task 10**: Entity-Relationship diagram generation
 - **Task 8**: SQLAlchemy relationship mappings
 - **Task 7**: Entity mapping for Place, Review, Amenity
 - **Task 6**: User entity mapping
