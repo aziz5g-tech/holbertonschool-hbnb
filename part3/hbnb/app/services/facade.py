@@ -1,5 +1,7 @@
-from hbnb.app.persistence.repository import InMemoryRepository
 from hbnb.app.services.repositories.user_repository import UserRepository
+from hbnb.app.services.repositories.place_repository import PlaceRepository
+from hbnb.app.services.repositories.review_repository import ReviewRepository
+from hbnb.app.services.repositories.amenity_repository import AmenityRepository
 from hbnb.app.models.user import User
 from hbnb.app.models.amenity import Amenity
 from hbnb.app.models.place import Place
@@ -22,13 +24,11 @@ class HBnBFacade:
     def __init__(self):
         # Only initialize repositories once
         if not HBnBFacade._repositories_initialized:
-            # Use UserRepository with SQLAlchemy (Task 6)
+            # Use SQLAlchemy repositories (Tasks 6 & 7)
             self.user_repo = UserRepository()
-            
-            # Keep InMemory for other entities (will be migrated in future tasks)
-            self.place_repo = InMemoryRepository()
-            self.review_repo = InMemoryRepository()
-            self.amenity_repo = InMemoryRepository()
+            self.place_repo = PlaceRepository()
+            self.review_repo = ReviewRepository()
+            self.amenity_repo = AmenityRepository()
             HBnBFacade._repositories_initialized = True
 
     # ===== User Management Methods =====
@@ -85,32 +85,20 @@ class HBnBFacade:
 
     def create_place(self, place_data):
         """Create a new place"""
-        # Get owner
+        # Note: Relationships (owner, amenities) will be added in a later task
+        # For now, we only validate that owner_id exists
         owner = self.user_repo.get(place_data['owner_id'])
         if not owner:
             raise ValueError("Owner not found")
 
-        # Get amenities if provided
-        amenities = []
-        if 'amenities' in place_data and place_data['amenities']:
-            for amenity_id in place_data['amenities']:
-                amenity = self.amenity_repo.get(amenity_id)
-                if amenity:
-                    amenities.append(amenity)
-
-        # Create place with owner
+        # Create place without owner relationship
         place = Place(
             title=place_data['title'],
             description=place_data.get('description', ''),
             price=place_data['price'],
             latitude=place_data['latitude'],
-            longitude=place_data['longitude'],
-            owner=owner
+            longitude=place_data['longitude']
         )
-
-        # Add amenities
-        for amenity in amenities:
-            place.add_amenity(amenity)
 
         self.place_repo.add(place)
         return place
@@ -141,20 +129,11 @@ class HBnBFacade:
         if 'longitude' in place_data:
             place.longitude = place_data['longitude']
 
-        # Update owner if provided
+        # Validate owner_id if provided (relationships added later)
         if 'owner_id' in place_data:
             owner = self.user_repo.get(place_data['owner_id'])
             if not owner:
                 raise ValueError("Owner not found")
-            place.owner = owner
-
-        # Update amenities if provided
-        if 'amenities' in place_data:
-            place.amenities = []
-            for amenity_id in place_data['amenities']:
-                amenity = self.amenity_repo.get(amenity_id)
-                if amenity:
-                    place.add_amenity(amenity)
 
         # Validate and save
         place.validate()
@@ -206,22 +185,19 @@ class HBnBFacade:
 
     def create_review(self, review_data):
         """Create a new review"""
-        # Get user
+        # Validate that user and place exist (relationships added later)
         user = self.user_repo.get(review_data['user_id'])
         if not user:
             raise ValueError("User not found")
 
-        # Get place
         place = self.place_repo.get(review_data['place_id'])
         if not place:
             raise ValueError("Place not found")
 
-        # Create review
+        # Create review without relationships
         review = Review(
             text=review_data['text'],
-            rating=review_data['rating'],
-            user=user,
-            place=place
+            rating=review_data['rating']
         )
 
         self.review_repo.add(review)
@@ -237,10 +213,19 @@ class HBnBFacade:
 
     def get_reviews_by_place(self, place_id):
         """Get all reviews for a specific place"""
+        # Note: Without relationships, we return empty list for now
+        # This will be properly implemented when relationships are added
         place = self.place_repo.get(place_id)
         if not place:
             return []
-        return place.reviews
+        # TODO: Query reviews by place_id when relationships are added
+        return []
+
+    def update_review(self, review_id, review_data):
+        """Update a review's information"""
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
 
     def update_review(self, review_id, review_data):
         """Update a review's information"""
@@ -254,24 +239,16 @@ class HBnBFacade:
         if 'rating' in review_data:
             review.rating = review_data['rating']
 
-        # Update user if provided
+        # Validate user_id and place_id if provided (relationships added later)
         if 'user_id' in review_data:
             user = self.user_repo.get(review_data['user_id'])
             if not user:
                 raise ValueError("User not found")
-            review.user = user
 
-        # Update place if provided
         if 'place_id' in review_data:
             place = self.place_repo.get(review_data['place_id'])
             if not place:
                 raise ValueError("Place not found")
-            # Remove from old place's reviews
-            if review in review.place.reviews:
-                review.place.reviews.remove(review)
-            review.place = place
-            # Add to new place's reviews
-            place.add_review(review)
 
         # Validate and save
         review.validate()
@@ -285,9 +262,6 @@ class HBnBFacade:
         """Delete a review"""
         review = self.review_repo.get(review_id)
         if review:
-            # Remove from place's reviews list
-            if review in review.place.reviews:
-                review.place.reviews.remove(review)
             self.review_repo.delete(review_id)
             return True
         return False

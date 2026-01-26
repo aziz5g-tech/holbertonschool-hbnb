@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, List
+from typing import Any
 
 from hbnb.app.models.base_model import BaseModel
-from hbnb.app.models.user import User
-from hbnb.app.models.amenity import Amenity
+from hbnb.app import db
 
 
 class Place(BaseModel):
@@ -15,11 +14,15 @@ class Place(BaseModel):
     - price (positive float)
     - latitude  (-90..90)
     - longitude (-180..180)
-    - owner (User instance)
-    Relationships:
-    - reviews: list of Review
-    - amenities: list of Amenity
+    Note: Relationships will be added in a later task
     """
+    __tablename__ = 'places'
+
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(1000), nullable=True, default="")
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
 
     def __init__(
         self,
@@ -27,7 +30,6 @@ class Place(BaseModel):
         price: float,
         latitude: float,
         longitude: float,
-        owner: User,
         description: str = "",
         **kwargs: Any,
     ):
@@ -38,23 +40,8 @@ class Place(BaseModel):
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.owner = owner
-
-        self.reviews: List[Any] = []      # will contain Review objects
-        self.amenities: List[Amenity] = []
 
         self.validate()
-
-    def add_review(self, review: Any) -> None:
-        # avoid duplicates
-        if review not in self.reviews:
-            self.reviews.append(review)
-            self.save()
-
-    def add_amenity(self, amenity: Amenity) -> None:
-        if amenity not in self.amenities:
-            self.amenities.append(amenity)
-            self.save()
 
     def validate(self) -> None:
         if not isinstance(self.title, str) or not self.title.strip():
@@ -80,6 +67,3 @@ class Place(BaseModel):
         if not (-180 <= float(self.longitude) <= 180):
             raise ValueError("longitude must be between -180 and 180")
         self.longitude = float(self.longitude)
-
-        if not isinstance(self.owner, User):
-            raise ValueError("owner must be a User instance")

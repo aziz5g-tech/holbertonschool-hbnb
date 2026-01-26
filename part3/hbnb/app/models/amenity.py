@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from hbnb.app.models.base_model import BaseModel
+from hbnb.app import db
 
 
 class Amenity(BaseModel):
@@ -10,6 +11,9 @@ class Amenity(BaseModel):
     Amenity entity:
     - name (required, max 50)
     """
+    __tablename__ = 'amenities'
+
+    name = db.Column(db.String(50), nullable=False, unique=True)
 
     def __init__(self, name: str, **kwargs: Any):
         super().__init__(**kwargs)
