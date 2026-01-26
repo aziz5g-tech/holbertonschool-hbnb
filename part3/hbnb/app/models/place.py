@@ -14,7 +14,8 @@ class Place(BaseModel):
     - price (positive float)
     - latitude  (-90..90)
     - longitude (-180..180)
-    Note: Relationships will be added in a later task
+    - owner_id (foreign key to User)
+    Relationships: owner, reviews, amenities
     """
     __tablename__ = 'places'
 
@@ -23,6 +24,12 @@ class Place(BaseModel):
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
+    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    
+    # Relationships
+    reviews = db.relationship('Review', backref='place', lazy=True, cascade='all, delete-orphan')
+    amenities = db.relationship('Amenity', secondary='place_amenity', lazy='subquery',
+                                backref=db.backref('places', lazy=True))
 
     def __init__(
         self,
@@ -30,6 +37,7 @@ class Place(BaseModel):
         price: float,
         latitude: float,
         longitude: float,
+        owner_id: str,
         description: str = "",
         **kwargs: Any,
     ):
@@ -40,6 +48,7 @@ class Place(BaseModel):
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
+        self.owner_id = owner_id
 
         self.validate()
 

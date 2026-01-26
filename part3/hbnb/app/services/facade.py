@@ -84,21 +84,28 @@ class HBnBFacade:
     # ===== Place Management Methods =====
 
     def create_place(self, place_data):
-        """Create a new place"""
-        # Note: Relationships (owner, amenities) will be added in a later task
-        # For now, we only validate that owner_id exists
+        """Create a new place with owner and amenities"""
+        # Validate owner exists
         owner = self.user_repo.get(place_data['owner_id'])
         if not owner:
             raise ValueError("Owner not found")
 
-        # Create place without owner relationship
+        # Create place with owner_id
         place = Place(
             title=place_data['title'],
             description=place_data.get('description', ''),
             price=place_data['price'],
             latitude=place_data['latitude'],
-            longitude=place_data['longitude']
+            longitude=place_data['longitude'],
+            owner_id=place_data['owner_id']
         )
+
+        # Add amenities if provided
+        if 'amenities' in place_data and place_data['amenities']:
+            for amenity_id in place_data['amenities']:
+                amenity = self.amenity_repo.get(amenity_id)
+                if amenity:
+                    place.amenities.append(amenity)
 
         self.place_repo.add(place)
         return place
@@ -129,11 +136,20 @@ class HBnBFacade:
         if 'longitude' in place_data:
             place.longitude = place_data['longitude']
 
-        # Validate owner_id if provided (relationships added later)
+        # Update owner if provided
         if 'owner_id' in place_data:
             owner = self.user_repo.get(place_data['owner_id'])
             if not owner:
                 raise ValueError("Owner not found")
+            place.owner_id = place_data['owner_id']
+
+        # Update amenities if provided
+        if 'amenities' in place_data:
+            place.amenities = []
+            for amenity_id in place_data['amenities']:
+                amenity = self.amenity_repo.get(amenity_id)
+                if amenity:
+                    place.amenities.append(amenity)
 
         # Validate and save
         place.validate()
@@ -185,7 +201,7 @@ class HBnBFacade:
 
     def create_review(self, review_data):
         """Create a new review"""
-        # Validate that user and place exist (relationships added later)
+        # Validate that user and place exist
         user = self.user_repo.get(review_data['user_id'])
         if not user:
             raise ValueError("User not found")
@@ -194,10 +210,12 @@ class HBnBFacade:
         if not place:
             raise ValueError("Place not found")
 
-        # Create review without relationships
+        # Create review with relationships
         review = Review(
             text=review_data['text'],
-            rating=review_data['rating']
+            rating=review_data['rating'],
+            user_id=review_data['user_id'],
+            place_id=review_data['place_id']
         )
 
         self.review_repo.add(review)
@@ -213,13 +231,10 @@ class HBnBFacade:
 
     def get_reviews_by_place(self, place_id):
         """Get all reviews for a specific place"""
-        # Note: Without relationships, we return empty list for now
-        # This will be properly implemented when relationships are added
         place = self.place_repo.get(place_id)
         if not place:
             return []
-        # TODO: Query reviews by place_id when relationships are added
-        return []
+        return place.reviews  # Now works with relationships!
 
     def update_review(self, review_id, review_data):
         """Update a review's information"""
@@ -239,16 +254,19 @@ class HBnBFacade:
         if 'rating' in review_data:
             review.rating = review_data['rating']
 
-        # Validate user_id and place_id if provided (relationships added later)
+        # Validate and update user_id if provided
         if 'user_id' in review_data:
             user = self.user_repo.get(review_data['user_id'])
             if not user:
                 raise ValueError("User not found")
+            review.user_id = review_data['user_id']
 
+        # Validate and update place_id if provided
         if 'place_id' in review_data:
             place = self.place_repo.get(review_data['place_id'])
             if not place:
                 raise ValueError("Place not found")
+            review.place_id = review_data['place_id']
 
         # Validate and save
         review.validate()

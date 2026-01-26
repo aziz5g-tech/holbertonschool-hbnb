@@ -11,22 +11,29 @@ class Review(BaseModel):
     Review entity:
     - text   (required)
     - rating (int 1..5)
-    Note: Relationships (user, place) will be added in a later task
+    - user_id (foreign key to User)
+    - place_id (foreign key to Place)
     """
     __tablename__ = 'reviews'
 
     text = db.Column(db.String(1000), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
 
     def __init__(
         self,
         text: str,
         rating: int,
+        user_id: str,
+        place_id: str,
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
         self.text = text
         self.rating = rating
+        self.user_id = user_id
+        self.place_id = place_id
 
         self.validate()
 
