@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HBnB - Place Details">
+    <meta name="author" content="HBnB Team">
+    <title>HBnB - Place Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/icon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">HBnB</a>
+            
+            <!-- Navigation -->
+            <nav>
+                <a href="index.html">← Back to Places</a>
+                <div class="user-info hidden" id="userInfo"></div>
+                <a href="login.html" class="login-button" id="loginButton">Login</a>
+                <button id="logoutBtn" class="btn-logout hidden">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Loading Spinner (Hidden by default) -->
+            <div id="loadingSpinner" class="spinner hidden">
+                <div class="loader"></div>
+                <p>Loading place details...</p>
+            </div>
+
+            <!-- Error Message (Hidden by default) -->
+            <div id="errorMessage" class="error-message hidden" role="alert"></div>
+
+            <!-- Place Details Section -->
+            <div id="placeDetails" class="place-details">
+                <!-- Place Header -->
+                <div class="place-header">
+                    <h1 id="placeTitle">Cozy Downtown Apartment</h1>
+                    <div>
+                        <div class="place-price">
+                            $120.00 <span class="place-price-label">/ night</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Place Information Grid -->
+                <div class="place-info">
+                    <!-- Description Section -->
+                    <div class="info-section">
+                        <h3>Description</h3>
+                        <p id="placeDescription">
+                            Beautiful apartment in the heart of the city. Perfect for couples or solo travelers. 
+                            This modern space features high-speed WiFi, a fully equipped kitchen, and comfortable 
+                            living spaces. Walking distance to major attractions, restaurants, and public transportation. 
+                            The apartment is located on the third floor with elevator access. Enjoy city views from 
+                            the large windows and relax in a peaceful, well-maintained building.
+                        </p>
+                    </div>
+
+                    <!-- Host Information Section -->
+                    <div class="info-section">
+                        <h3>Host Information</h3>
+                        <div id="hostInfo" class="host-card">
+                            <p><strong>Host:</strong> John Doe</p>
+                            <p><strong>Email:</strong> john.doe@example.com</p>
+                            <p><strong>Member since:</strong> 2024</p>
+                        </div>
+                    </div>
+
+                    <!-- Location Section -->
+                    <div class="info-section">
+                        <h3>Location</h3>
+                        <p id="placeLocation">
+                            <strong>Coordinates:</strong><br>
+                            Latitude: 40.7128<br>
+                            Longitude: -74.0060
+                        </p>
+                        <p style="margin-top: 1rem;">
+                            <strong>📍 Country:</strong> United States
+                        </p>
+                    </div>
+
+                    <!-- Amenities Section -->
+                    <div class="info-section" id="amenitiesSection">
+                        <h3>Amenities</h3>
+                        <div id="amenitiesList" class="amenities-list">
+                            <span class="amenity-tag">WiFi</span>
+                            <span class="amenity-tag">Kitchen</span>
+                            <span class="amenity-tag">Air Conditioning</span>
+                            <span class="amenity-tag">Heating</span>
+                            <span class="amenity-tag">TV</span>
+                            <span class="amenity-tag">Elevator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <section class="reviews-section">
+                    <div class="reviews-header">
+                        <h3>Guest Reviews</h3>
+                        <button id="addReviewBtn" class="btn-primary hidden">
+                            Add Review
+                        </button>
+                    </div>
+
+                    <div id="reviewsList" class="reviews-list">
+                        <!-- Sample Review Card 1 -->
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="review-author">Sarah Johnson</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="review-text">
+                                Amazing place! Very clean and comfortable. The location is perfect for exploring 
+                                the city. The host was very responsive and helpful. Would definitely stay here again!
+                            </p>
+                            <p class="review-date">January 15, 2026</p>
+                        </div>
+
+                        <!-- Sample Review Card 2 -->
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="review-author">Michael Chen</span>
+                                <span class="review-rating">⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="review-text">
+                                Great apartment in a convenient location. Everything was as described. 
+                                The only minor issue was street noise at night, but overall a wonderful experience.
+                            </p>
+                            <p class="review-date">January 10, 2026</p>
+                        </div>
+
+                        <!-- Sample Review Card 3 -->
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="review-author">Emma Wilson</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="review-text">
+                                Loved my stay! The apartment is beautifully decorated and has all the amenities 
+                                you need. Perfect for a weekend getaway. Highly recommend!
+                            </p>
+                            <p class="review-date">December 28, 2025</p>
+                        </div>
+                    </div>
+
+                    <!-- No Reviews Message (Hidden when there are reviews) -->
+                    <div id="noReviews" class="no-reviews hidden">
+                        <p>No reviews yet. Be the first to review this place!</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 HBnB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Place Details Functionality (To be implemented in Task 4) -->
+    <script src="scripts/place.js"></script>
+</body>
+</html>

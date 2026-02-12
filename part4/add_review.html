@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HBnB - Add Your Review">
+    <meta name="author" content="HBnB Team">
+    <title>HBnB - Add Review</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/icon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">HBnB</a>
+            
+            <!-- Navigation -->
+            <nav>
+                <a href="index.html">← Back to Places</a>
+                <div class="user-info" id="userInfo">Welcome, Guest!</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Add Review Form Container -->
+            <div class="add-review">
+                <h2>Add Your Review</h2>
+                <p class="subtitle" id="placeTitle">Share your experience at this amazing place</p>
+
+                <!-- Review Form -->
+                <form id="reviewForm" class="form" novalidate>
+                    <!-- Rating Field -->
+                    <div class="form-group">
+                        <label for="rating">Rating *</label>
+                        <select id="rating" name="rating" required aria-required="true">
+                            <option value="">Select a rating</option>
+                            <option value="5">⭐⭐⭐⭐⭐ Excellent (5 stars)</option>
+                            <option value="4">⭐⭐⭐⭐ Very Good (4 stars)</option>
+                            <option value="3">⭐⭐⭐ Good (3 stars)</option>
+                            <option value="2">⭐⭐ Fair (2 stars)</option>
+                            <option value="1">⭐ Poor (1 star)</option>
+                        </select>
+                        <small class="form-text">How would you rate your experience?</small>
+                    </div>
+
+                    <!-- Review Text Field -->
+                    <div class="form-group">
+                        <label for="reviewText">Your Review *</label>
+                        <textarea 
+                            id="reviewText" 
+                            name="reviewText" 
+                            rows="6" 
+                            required 
+                            minlength="10"
+                            maxlength="1000"
+                            placeholder="Share your thoughts about this place... (minimum 10 characters)"
+                            aria-required="true"
+                            aria-describedby="reviewHelp charCount"
+                        ></textarea>
+                        <small id="reviewHelp" class="form-text">
+                            Tell us about your experience. What did you like? What could be improved?
+                        </small>
+                        <div id="charCount" class="character-counter">
+                            <span id="currentCount">0</span> / 1000 characters
+                        </div>
+                    </div>
+
+                    <!-- Error Message Container (Hidden by default) -->
+                    <div id="errorMessage" class="error-message hidden" role="alert"></div>
+
+                    <!-- Success Message Container (Hidden by default) -->
+                    <div id="successMessage" class="success-message hidden" role="alert"></div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" id="cancelBtn" class="btn-cancel">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <span id="btnText">Submit Review</span>
+                            <span id="btnSpinner" class="btn-spinner hidden"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Information Box -->
+            <div class="container" style="max-width: 600px; margin: 2rem auto;">
+                <div class="info-section">
+                    <h3>Review Guidelines</h3>
+                    <ul style="margin-left: 1.5rem; line-height: 2;">
+                        <li>Be honest and detailed in your review</li>
+                        <li>Focus on your personal experience</li>
+                        <li>Mention specific aspects like cleanliness, location, or amenities</li>
+                        <li>Be respectful and constructive</li>
+                        <li>Minimum 10 characters required</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 HBnB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Add Review Functionality (To be implemented in Task 5) -->
+    <script src="scripts/add_review.js"></script>
+    
+    <!-- Character Counter Script -->
+    <script>
+        // Character counter for textarea (inline for immediate feedback)
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('reviewText');
+            const currentCount = document.getElementById('currentCount');
+            
+            if (textarea && currentCount) {
+                textarea.addEventListener('input', function() {
+                    const count = this.value.length;
+                    currentCount.textContent = count;
+                    
+                    // Change color based on character count
+                    const charCountDiv = document.getElementById('charCount');
+                    if (count > 1000) {
+                        charCountDiv.style.color = 'var(--error-color)';
+                    } else if (count < 10) {
+                        charCountDiv.style.color = 'var(--text-secondary)';
+                    } else {
+                        charCountDiv.style.color = 'var(--success-color)';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

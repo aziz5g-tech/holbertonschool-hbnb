@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HBnB - Browse and book amazing places to stay">
+    <meta name="author" content="HBnB Team">
+    <title>HBnB - Explore Places</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/icon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">HBnB</a>
+            
+            <!-- Navigation -->
+            <nav>
+                <div class="user-info hidden" id="userInfo"></div>
+                <a href="login.html" class="login-button" id="loginButton">Login</a>
+                <button id="logoutBtn" class="btn-logout hidden">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Filters Section -->
+            <section class="filters">
+                <h2>Explore Amazing Places</h2>
+                <div class="filter-group">
+                    <label for="priceFilter">Filter by Price (per night):</label>
+                    <select id="price-filter" name="price">
+                        <option value="all">All</option>
+                        <option value="10">Under $10</option>
+                        <option value="50">Under $50</option>
+                        <option value="100">Under $100</option>
+                    </select>
+                </div>
+                <button id="loginPrompt" class="btn-primary hidden">
+                    Login to Add a Place
+                </button>
+            </section>
+
+            <!-- Places Grid Section -->
+            <section id="placesSection" class="places-grid">
+                <!-- Sample Place Card 1 -->
+                <div class="place-card" onclick="window.location.href='place.html?id=1'">
+                    <div class="place-card-image">
+                        🏠
+                    </div>
+                    <h3>Cozy Downtown Apartment</h3>
+                    <div class="price">
+                        $120.00 <span class="price-label">/ night</span>
+                    </div>
+                    <p class="description">
+                        Beautiful apartment in the heart of the city. Perfect for couples or solo travelers. 
+                        Walking distance to major attractions and restaurants.
+                    </p>
+                    <p class="location">📍 United States</p>
+                    <a href="place.html?id=1" class="details-button">View Details</a>
+                </div>
+
+                <!-- Sample Place Card 2 -->
+                <div class="place-card" onclick="window.location.href='place.html?id=2'">
+                    <div class="place-card-image">
+                        🏡
+                    </div>
+                    <h3>Luxury Villa with Pool</h3>
+                    <div class="price">
+                        $350.00 <span class="price-label">/ night</span>
+                    </div>
+                    <p class="description">
+                        Stunning villa with private pool and garden. Spacious rooms with modern amenities. 
+                        Perfect for families or groups seeking luxury and comfort.
+                    </p>
+                    <p class="location">📍 Spain</p>
+                    <a href="place.html?id=2" class="details-button">View Details</a>
+                </div>
+
+                <!-- Sample Place Card 3 -->
+                <div class="place-card" onclick="window.location.href='place.html?id=3'">
+                    <div class="place-card-image">
+                        🏖️
+                    </div>
+                    <h3>Beachfront Bungalow</h3>
+                    <div class="price">
+                        $200.00 <span class="price-label">/ night</span>
+                    </div>
+                    <p class="description">
+                        Wake up to ocean views! This charming bungalow offers direct beach access. 
+                        Relax and enjoy the sound of waves from your private deck.
+                    </p>
+                    <p class="location">📍 Italy</p>
+                    <a href="place.html?id=3" class="details-button">View Details</a>
+                </div>
+
+                <!-- Sample Place Card 4 -->
+                <div class="place-card" onclick="window.location.href='place.html?id=4'">
+                    <div class="place-card-image">
+                        🏔️
+                    </div>
+                    <h3>Mountain Cabin Retreat</h3>
+                    <div class="price">
+                        $180.00 <span class="price-label">/ night</span>
+                    </div>
+                    <p class="description">
+                        Escape to the mountains in this cozy cabin. Enjoy hiking trails, fresh air, 
+                        and stunning views. Perfect for nature lovers and adventure seekers.
+                    </p>
+                    <p class="location">📍 Germany</p>
+                    <a href="place.html?id=4" class="details-button">View Details</a>
+                </div>
+
+                <!-- Sample Place Card 5 -->
+                <div class="place-card" onclick="window.location.href='place.html?id=5'">
+                    <div class="place-card-image">
+                        🏰
+                    </div>
+                    <h3>Historic City Loft</h3>
+                    <div class="price">
+                        $150.00 <span class="price-label">/ night</span>
+                    </div>
+                    <p class="description">
+                        Experience history in this beautifully restored loft. High ceilings, 
+                        original features, and modern comfort. Located in the old town district.
+                    </p>
+                    <p class="location">📍 France</p>
+                    <a href="place.html?id=5" class="details-button">View Details</a>
+                </div>
+            </section>
+
+            <!-- Loading Spinner (Hidden by default) -->
+            <div id="loadingSpinner" class="spinner hidden">
+                <div class="loader"></div>
+                <p>Loading places...</p>
+            </div>
+
+            <!-- Error Message (Hidden by default) -->
+            <div id="errorMessage" class="error-message hidden" role="alert"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 HBnB. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Index Page Functionality (To be implemented in Task 3) -->
+    <script src="scripts/index.js"></script>
+</body>
+</html>

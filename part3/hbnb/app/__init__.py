@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from hbnb.app.extensions import bcrypt, jwt
 
 db = SQLAlchemy()
@@ -18,6 +19,16 @@ def create_app(config_class="config.DevelopmentConfig"):
     """
     app = Flask(__name__)
     app.config.from_object(config_class)
+    
+    # Enable CORS for all routes (allow frontend on port 8000 to access API)
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:8000", "http://127.0.0.1:8000"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })
     
     # Initialize extensions
     db.init_app(app)
