@@ -8,17 +8,6 @@ JWT_IMPLEMENTATION.md
 __pycache__/
 AUTHENTICATED_ENDPOINTS.md
 test_authenticated_endpoints.py
-
-# Virtual environments
-venv/
-.venv/
-env/
-ENV/
-
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
-# Instance folder
-instance/
+instractions_form
+part4/QUICKSTART.md
+info
