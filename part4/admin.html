@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - HBnB</title>
+    <link rel="icon" href="images/icon.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Admin-specific minimal styles */
+        #admin-panel { display: none; }
+        .admin-header {
+            background-color: #fff;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-header h1 { color: #2c3e50; font-size: 1.8rem; margin: 0; }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        .logout-btn:hover { background: #c82333; }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: #fff;
+            border: 2px solid #795548;
+            color: #795548;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .tab-btn:hover { background: #aaaaaa; color: white; border-color: #aaaaaa; }
+        .tab-btn.active { background: #795548; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .form-section h2 { color: #2c3e50; margin-bottom: 1.5rem; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .list-section h2 { color: #2c3e50; margin-bottom: 1rem; }
+        #users-list, #amenities-list, #places-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .item-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .item-card h3 { color: #2c3e50; margin-bottom: 0.5rem; }
+        .item-card p { color: #666; font-size: 0.9rem; margin: 0.3rem 0; }
+        .item-id {
+            color: #999;
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-top: 0.5rem;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #795548;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="login-section">
+        <header>
+            <img src="images/logo.png" alt="Logo" class="logo">
+            <nav>
+                <a href="index.html">Home</a>
+            </nav>
+        </header>
+        <main>
+            <form id="admin-login-form">
+                <h2>🔐 Admin Login</h2>
+                <label for="admin-email">Email</label>
+                <input type="email" id="admin-email" required placeholder="admin@hbnb.com">
+                
+                <label for="admin-password">Password</label>
+                <input type="password" id="admin-password" required placeholder="Enter password">
+                
+                <button type="submit">Login</button>
+                <div id="login-message"></div>
+            </form>
+        </main>
+        <footer>
+            <p>&copy; 2026 HBnB. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel">
+        <header>
+            <img src="images/logo.png" alt="Logo" class="logo">
+            <nav>
+                <a href="index.html">Home</a>
+                <button class="logout-btn" onclick="adminLogout()">Logout</button>
+            </nav>
+        </header>
+        
+        <main>
+            <div class="admin-header">
+                <h1>🎛️ Admin Dashboard</h1>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('users')">👥 Users</button>
+                <button class="tab-btn" onclick="switchTab('amenities')">✨ Amenities</button>
+                <button class="tab-btn" onclick="switchTab('places')">🏠 Places</button>
+                <button class="tab-btn" onclick="switchTab('reviews')">⭐ Reviews</button>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content active">
+                <div class="form-section">
+                    <h2>Create New User</h2>
+                    <form id="create-user-form">
+                        <div class="form-row">
+                            <div>
+                                <label for="user-first-name">First Name *</label>
+                                <input type="text" id="user-first-name" required maxlength="50">
+                            </div>
+                            <div>
+                                <label for="user-last-name">Last Name *</label>
+                                <input type="text" id="user-last-name" required maxlength="50">
+                            </div>
+                        </div>
+                        <label for="user-email">Email *</label>
+                        <input type="email" id="user-email" required>
+                        
+                        <label for="user-password">Password *</label>
+                        <input type="password" id="user-password" required>
+                        
+                        <div style="margin: 15px 0;">
+                            <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                                <input type="checkbox" id="user-is-admin" style="width: auto; margin-right: 10px;">
+                                <span>Make this user an Admin</span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit">Create User</button>
+                    </form>
+                </div>
+
+                <div class="list-section">
+                    <h2>All Users</h2>
+                    <div id="users-list">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amenities Tab -->
+            <div id="amenities-tab" class="tab-content">
+                <div class="form-section">
+                    <h2>Add New Amenity</h2>
+                    <form id="create-amenity-form">
+                        <label for="amenity-name">Amenity Name *</label>
+                        <input type="text" id="amenity-name" required placeholder="e.g., WiFi, Pool, Parking">
+                        
+                        <button type="submit">Add Amenity</button>
+                    </form>
+                </div>
+
+                <div class="list-section">
+                    <h2>All Amenities</h2>
+                    <div id="amenities-list">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Places Tab -->
+            <div id="places-tab" class="tab-content">
+                <div class="form-section">
+                    <h2>Create New Place</h2>
+                    <form id="create-place-form">
+                        <label for="place-name">Place Title *</label>
+                        <input type="text" id="place-name" required placeholder="e.g., Luxury Villa" maxlength="100">
+                        
+                        <label for="place-description">Description</label>
+                        <textarea id="place-description" placeholder="Describe the place..."></textarea>
+                        
+                        <div class="form-row">
+                            <div>
+                                <label for="place-latitude">Latitude *</label>
+                                <input type="number" step="0.000001" id="place-latitude" required placeholder="Between -90 and 90" min="-90" max="90">
+                            </div>
+                            <div>
+                                <label for="place-longitude">Longitude *</label>
+                                <input type="number" step="0.000001" id="place-longitude" required placeholder="Between -180 and 180" min="-180" max="180">
+                            </div>
+                        </div>
+                        
+                        <label for="place-price">Price per Night * ($)</label>
+                        <input type="number" step="0.01" id="place-price" required min="0.01" placeholder="e.g., 100.00">
+                        
+                        <label for="place-owner">Owner (User) *</label>
+                        <select id="place-owner" required>
+                            <option value="">Select owner...</option>
+                        </select>
+                        
+                        <label for="place-amenities">Amenities (Hold Ctrl/Cmd to select multiple)</label>
+                        <select id="place-amenities" multiple size="6" style="height: auto;">
+                            <option value="">Loading...</option>
+                        </select>
+                        <small style="color: #666; display: block; margin-top: 5px;">💡 Tip: Hold Ctrl (Windows) or Cmd (Mac) to select multiple amenities</small>
+                        
+                        <button type="submit">Create Place</button>
+                    </form>
+                </div>
+
+                <div class="list-section">
+                    <h2>All Places</h2>
+                    <div id="places-list">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Tab -->
+            <div id="reviews-tab" class="tab-content">
+                <div id="reviews-alerts"></div>
+                <div class="list-section">
+                    <h2>All Reviews</h2>
+                    <div id="reviews-list">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 HBnB. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
