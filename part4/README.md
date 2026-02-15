@@ -42,7 +42,7 @@ This is the front-end implementation of the HBnB application using HTML5, CSS3, 
 Before using the application, update the API base URL in `scripts.js`:
 
 ```javascript
-const API_BASE_URL = 'http://127.0.0.1:5000/api/v1';
+const API_BASE_URL = 'http://127.0.0.1:5001/api/v1';
 ```
 
 ## Usage
@@ -70,7 +70,7 @@ const API_BASE_URL = 'http://127.0.0.1:5000/api/v1';
 - Submit to add your review
 
 ## API Endpoints Used
-- `POST /api/v1/auth/login` - User authentication
+- `POST /api/v1/users/login` - User authentication
 - `GET /api/v1/places/` - Get all places
 - `GET /api/v1/places/{id}` - Get specific place details
 - `POST /api/v1/reviews/` - Submit a new review
