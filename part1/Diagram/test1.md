@@ -1,40 +1,45 @@
-title MVP System Architecture
+# MVP System Architecture
 
-direction right
+```mermaid
+flowchart LR
 
-Frontend [icon: react] {
-  React App [icon: react]
-  State Management [icon: redux]
-}
+  subgraph Frontend
+    RA[React App]
+    SM[State Management<br/>Redux]
+  end
 
-Backend [icon: server] {
-  Node Express API [icon: nodejs, label: "Express API"]
-  Auth Service [icon: lock]
-  Business Logic [icon: cpu]
-}
+  subgraph Backend
+    API[Node Express API<br/>Express API]
+    AUTH[Auth Service]
+    BL[Business Logic]
+  end
 
-Data Layer [icon: database] {
-  PostgreSQL [icon: postgresql]
-  Redis Cache [icon: redis]
-}
+  subgraph Data_Layer[Data Layer]
+    PG[(PostgreSQL)]
+    REDIS[(Redis Cache)]
+  end
 
-External Services [icon: cloud] {
-  OpenWeatherMap [icon: cloud-rain]
-  Email Service [icon: mail]
-}
+  subgraph External_Services[External Services]
+    OWM[OpenWeatherMap]
+    EMAIL[Email Service]
+  end
 
-// Frontend to Backend
-React App > Node Express API: HTTP requests
-Node Express API < React App: JSON responses
+  %% Frontend to Backend
+  RA -->|HTTP requests| API
+  API -->|JSON responses| RA
+  RA -->|login/signup| AUTH
 
-// Auth flow
-React App > Auth Service: login/signup
-Auth Service <> Redis Cache: session tokens
+  %% Auth flow
+  AUTH <-->|session tokens| REDIS
 
-// Backend to Data
-Node Express API <> PostgreSQL: CRUD operations
-Node Express API <> Redis Cache: caching
+  %% Backend to Data
+  API <-->|CRUD operations| PG
+  API <-->|caching| REDIS
 
-// External integrations
-Business Logic > OpenWeatherMap: fetch weather
-Business Logic > Email Service: notifications
+  %% Internal backend flow
+  API --> BL
+
+  %% External integrations
+  BL -->|fetch weather| OWM
+  BL -->|notifications| EMAIL
+```
